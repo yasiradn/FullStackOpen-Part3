@@ -2,9 +2,9 @@ const experess = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app  = experess()
+app.use(experess.static('build'))
 app.use(cors())
 app.use(experess.json());
-//app.use(morgan(':method :url :status :res[content-length] - :response-time ms '))
 app.use(morgan(function (tokens, req, res) {
     return [
       tokens.method(req, res),
