@@ -1,7 +1,18 @@
 const experess = require('express')
+const morgan = require('morgan')
 const app  = experess()
 app.use(experess.json());
-
+//app.use(morgan(':method :url :status :res[content-length] - :response-time ms '))
+app.use(morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms',
+      JSON.stringify(req.body)
+    ].join(' ')
+  }))
 let persons = [
     { name: 'Arto Hellas', number: '040-123456' , id:1},
     { name: 'Ada Lovelace', number: '39-44-5323523',id:2 },
