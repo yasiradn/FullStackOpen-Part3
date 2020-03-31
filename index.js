@@ -1,5 +1,6 @@
 const experess = require('express')
 const app  = experess()
+app.use(experess.json());
 
 let persons = [
     { name: 'Arto Hellas', number: '040-123456' , id:1},
@@ -20,6 +21,26 @@ app.delete('/api/persons/:id', (req,res)=> {
  const get_id = Number(req.params.id)
  person = persons.filter(person => person.id != get_id)
  res.status(204).end()
+})
+
+app.post('/api/persons', (req,res)=>{
+    const getBody = req.body
+    let findName = persons.find(person => person.name === getBody.name)
+    if(!getBody.name || !getBody.number || findName){
+        return res.status(400).json({ 
+            error: 'number or name is missing' 
+          })  
+    }
+
+    const newPerson = {
+        name: getBody.name,
+        number: getBody.number,
+        id: Math.floor(Math.random() * 10000)
+    }
+    console.log(newPerson)
+    person = persons.concat(newPerson)
+    console.log(persons)
+    res.json(person)
 })
 
 app.get('/api/persons/:id', (req,res)=> {
