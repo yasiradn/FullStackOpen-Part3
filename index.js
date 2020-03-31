@@ -28,7 +28,7 @@ app.post('/api/persons', (req,res)=>{
     let findName = persons.find(person => person.name === getBody.name)
     if(!getBody.name || !getBody.number || findName){
         return res.status(400).json({ 
-            error: 'number or name is missing' 
+            error: 'number or name is missing or name must be unique' 
           })  
     }
 
