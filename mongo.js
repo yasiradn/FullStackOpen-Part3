@@ -22,25 +22,25 @@ const url = `mongodb+srv://admin:${password}@cluster0-sjxwf.mongodb.net/test?ret
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const phoneBookSchema = new mongoose.Schema({
-    name: String,
-    number: String
+  name: String,
+  number: String
 })
 
 const Person = mongoose.model('person', phoneBookSchema)
 
 if(process.argv.length == 3){
-    Person.find({}).then(result => {
-        console.log('Phonebook:')
-        result.forEach(person=> {
-            console.log(person.name +' '+ person.number)
-        })
-        mongoose.connection.close()
+  Person.find({}).then(result => {
+    console.log('Phonebook:')
+    result.forEach(person=> {
+      console.log(person.name +' '+ person.number)
     })
+    mongoose.connection.close()
+  })
 } else {
-    const person = new Person({ name, number })
-    person.save().then(result=>{
-        console.log(`Added ${result.name} ${result.number} to phonebook`)
-        mongoose.connection.close()
-    })
+  const person = new Person({ name, number })
+  person.save().then(result=>{
+    console.log(`Added ${result.name} ${result.number} to phonebook`)
+    mongoose.connection.close()
+  })
     
 }
