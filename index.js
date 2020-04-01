@@ -51,14 +51,14 @@ app.post('/api/persons', (req,res)=>{
           })  
     }
 
-    const newPerson = {
+    const newPerson = new Person ({
         name: getBody.name,
-        number: getBody.number,
-        id: Math.floor(Math.random() * 10000)
-    }
-    person = persons.concat(newPerson)
-    console.log(persons)
-    res.json(person)
+        number: getBody.number
+    }) 
+
+    newPerson.save().then(result=>{
+        res.json(result.toJSON())
+    })
 })
 
 app.get('/api/persons/:id', (req,res)=> {
