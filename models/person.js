@@ -12,7 +12,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true,useCreat
   
   const phoneBookSchema = new mongoose.Schema({
     name: {type: String, minlength:3, required:true, unique:true},
-    number: {type: String, minlength:5, required:true, unique:true}
+    number: {type: String, minlength:8, required:true, unique:true}
 })
 phoneBookSchema.plugin(uniqueValidator)
 
