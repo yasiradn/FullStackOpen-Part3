@@ -32,14 +32,27 @@ app.get('/api/persons', (req, res)=> {
    })
 })
 
+app.put('/api/persons/:id',(req,res,next) => {
+    const getBody = req.body
+    const newPerson = {
+        name: getBody.name,
+        number: getBody.number
+    }
+    Person.findByIdAndUpdate(req.params.id,newPerson).then(updatePerson=>{
+        res.json(updatePerson.toJSON())
+    }).catch(error => next(error))
+})
+
 app.get('/api/info',(req,res)=> {
     res.send(`Phonebook has info for ${persons.length} people\n ${new Date()} `)
 })
 
-app.delete('/api/persons/:id', (req,res)=> {
- const get_id = Number(req.params.id)
- person = persons.filter(person => person.id != get_id)
- res.status(204).end()
+app.delete('/api/persons/:id', (req,res,next)=> {
+    Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (req,res)=>{
@@ -61,15 +74,26 @@ app.post('/api/persons', (req,res)=>{
     })
 })
 
-app.get('/api/persons/:id', (req,res)=> {
-    const get_id = Number(req.params.id)
-    const get_person = persons.find(person => person.id == get_id)
-    if(get_person){
-        res.json(get_person)
-    } else {
+app.get('/api/persons/:id', (req,res,next)=> {
+    const get_id = req.params.id
+    Person.findById(req.params.id).then(person=>{
+       if(person){
+        res.json(person.toJSON())
+       }else{
         res.status(404).end()
-    }
+       }
+    }).catch(error => next(error))
 })
+
+const errorHandler = (error, request, response, next) => {
+
+  if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+  } 
+    next(error)
+  }
+  
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 
